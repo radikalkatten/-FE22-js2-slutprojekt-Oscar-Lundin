@@ -25,7 +25,7 @@ createNewPostBtn?.addEventListener('click', ()=>{createPostForm?.classList.toggl
 logInBtn?.addEventListener('click', () =>{logInForm?.classList.toggle('inactive'); loginCreate?.classList.add('inactive')})
 createFormBtn?.addEventListener('click', () =>{loginCreate?.classList.toggle('inactive'); logInForm?.classList.add('inactive')})
 createFormBtn2?.addEventListener('click', () =>{loginCreate?.classList.remove('inactive'); logInForm?.classList.add('inactive')})
-logOutBtn?.addEventListener('click', () => {console.log("logout function cookie", document.cookie); document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=None; Secure";  location.reload()})
+logOutBtn?.addEventListener('click', () => {console.log("logout function cookie", document.cookie); document.cookie = "username=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=None; Secure";  location.reload()})
 let currentFeed: string = `${getCookie()}`
 // #endregion
 // #region inputStuff
@@ -239,7 +239,7 @@ function setCookie(uvalue: string):void {
   const d = new Date();
   d.setTime(d.getTime() + (24*60*60*1000));
   let expires = "expires="+ d.toUTCString();
-  document.cookie = "username=" + uvalue + ";" + expires + ";path=/";
+  document.cookie = "username=" + uvalue + ";" + expires + ";path=/; SameSite=none; Secure";
 }
 // document.cookie = "username=" + "shinsu" + ";" + "expires=Thu, 01 Jan 1970 00:00:00 UTC;"
 function checkCurrentProfile(feed: string): void {
