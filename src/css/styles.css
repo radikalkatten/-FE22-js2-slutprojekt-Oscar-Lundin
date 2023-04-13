@@ -1,0 +1,486 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans:400,400i,700,700i&subset=greek-ext');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Coming+Soon&family=Mynerve&display=swap');
+
+
+@font-face {
+  font-family: 'garfieldSans';
+  src: url('../font/Garfield\ Regular.ttf') format('truetype');
+}
+
+header{
+  background-color: black;
+  margin: 0;
+  width: 100%;
+  border-radius: 0 0 5px 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content:space-between;
+}
+body button{
+ 
+  background-color: #cf245f;
+  background-image: linear-gradient(to bottom right, #fcd34d, #ef4444, #ec4899);
+  border: 0;
+  border-radius: .25rem;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  font-family: 'garfieldSans';
+  font-weight: 600;
+  line-height: 1.75rem; 
+  padding: 1rem 1.25rem;
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.loggedInAs{
+  
+  margin: 0;
+  padding: 32px 32px 42px;
+  color: #d47f00;
+  font-family: ui-sans-serif,system-ui,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+}
+#createNewPost{
+  margin-left: 20px;
+}
+.loggedInAs:hover{
+  color: #EEE;
+  cursor: pointer;
+}
+.flex{
+  display: flex;
+  flex-direction: column;
+}
+
+.contentContainer{
+  width: 100%;
+  display: flex;
+  margin: 0 auto;
+  vertical-align: baseline;
+  padding: 32px 32px 42px;
+  box-sizing: border-box;
+}
+
+.profile{
+  background-color: rgb(255, 123, 0);
+  padding: 32px 32px 42px;
+  border-bottom: 2px#555 solid;
+}
+
+#usersDir {
+  width: 22%;
+  float: right;
+  margin-top: 80px;
+}
+
+#userHolder {
+  margin-left: 20px;
+}
+
+.postContainer {
+  max-width: 1240;
+  border-radius: 10px;
+  flex: 1 0 auto;
+  min-height: 180px;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+  width: 68%;
+  float: left;
+  
+  position: relative;
+}
+
+.post{
+  border-radius: 10px;
+  box-shadow: 0px -1px 10px -5px rgba(0,0,0,0.75);
+  padding: 10px 20px 20px;
+  margin-top: 3px;
+  background-image: linear-gradient(190deg,rgba(255,122,24,.55),#fff);
+  display: flex;
+  flex-direction: row;
+}
+.post :first-child{
+  margin-right: 5px;
+  font-size: 15px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.post :nth-child(1) h2{
+  font-family: 'Caveat', cursive;
+  font-size: 25;
+}
+.post :nth-child(1) h1{
+  font-family: 'Mynerve', cursive;
+}
+.message {
+  background-color: rgba(255, 120, 24, 1);
+  overflow: hidden;
+  color: #434343;
+  padding: 1rem;
+  border-radius: 8px;
+  border: #434343 solid 1px;
+  box-shadow: #555 .5px .5px;
+  font-family: 'Coming Soon', cursive;
+  font-size: 30px;
+  
+}
+.postTextDiv {
+  position: relative;
+}
+.input-container input[type="radio" i]{
+  margin: 0
+}
+
+.profilePicDiv{
+  margin-top: 10px;
+  /* margin-left: 5px; */
+  height: 100px;
+  width: 100px;
+  border-radius: 999px
+}
+
+#garf1{
+  background-image: url(../images/garf1.jpg);
+  background-size: 100px;
+}
+
+#garf2{
+  background-image: url(../images/garf2.jpg);
+  background-size: 100px;
+}
+
+#garf3{
+  background-image: url(../images/garf3.jpg);
+  background-size: 100px;
+}
+
+#garf4{
+  background-image: url(../images/garf4.jpg);
+  background-size: 100px;
+}
+
+.profileChoose{
+  width: 100px;
+  display: block;
+  margin-top: 10px;
+}
+
+.button-76:hover {
+  box-shadow: none;
+}
+
+@media (min-width: 1024px) {
+  .button-76 {
+    font-size: 1.5rem; 
+    padding: 1rem 1.5rem;
+    line-height: 2rem; 
+  }
+
+}
+
+.inactive{
+  display: none
+}
+
+body{
+	background-image: url("https://c4.wallpaperflare.com/wallpaper/153/392/956/cat-eyes-garfield-minimalism-wallpaper-preview.jpg");
+	background-position: center;
+  background-origin: content-box;
+  background-repeat: repeat;
+  background-size: 90%;
+	min-height: 100vh;
+	font-family: 'Noto Sans', sans-serif;
+}
+
+.profileImgPost{
+  height: 100px;
+  border-radius: 9999px;
+}
+#welcomeText{
+  font-family: 'garfieldSans';
+  font-size: 24px;
+  fill: #ff7b00;
+  text-shadow: #555 1px 1px;
+  height: 600px;
+  overflow: hidden;
+}
+
+#welcomeText path{
+  fill: transparent;
+  
+}
+
+.text-center{
+	color:#fff;	
+	text-transform:uppercase;
+  font-size: 23px;
+  margin: -50px 0 80px 0;
+  display: block;
+  text-align: center;
+}
+
+.imageContainer{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 8px;
+  right: 70px;
+}
+
+.formContainer{
+  width: 400px;
+  height: auto;
+}
+
+.box{
+	position:absolute;
+	left:50%;
+	top: 55%;
+	transform: translate(-50%,-50%);
+  background-color: rgba(0, 0, 0, 0.89);
+	border-radius:3px;
+	padding:70px 100px;
+  z-index: 100;
+}
+
+.input-container{
+	position:relative;
+	margin-bottom:25px;
+}
+
+.input-container label{
+	
+	top:0px;
+	left:0px;
+	font-size:16px;
+	color:#fff;	
+  pointer-events: none;
+	
+}
+
+.input-container input{ 
+  border:0;
+  border-bottom:1px solid #555;  
+  background:transparent;
+  width:100%;
+  padding:8px 0 5px 0;
+  font-size:16px;
+  color:#fff;
+}
+.titleDiv{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.box h2{
+  color: #ffffff;
+}
+.comicHolders h2{
+  width: 200px;
+  margin: 0;
+}
+.userButton:hover{
+  color: #faf4f4;
+  
+}
+.userButton {
+  cursor: pointer;
+}
+.comicHolders{
+  display: flex;
+  flex-direction: column;
+  float: right;
+  color: #EEE;
+  top: -15px;
+  padding-top: 10px;
+  padding-right: 10px;
+  margin-bottom: 10px;
+}
+.comicHolders button{
+  margin-bottom: 10px;
+}
+#logOutBtn {
+  float: right;
+  margin-top: 0;
+}
+.postHeader{
+  margin-left: 10px;
+}
+.btn{
+	color:#fff;
+	background-color:#e74c3c;
+	outline: none;
+  border: 0;
+  color: #fff;
+	padding: 10px 20px 10px;
+	text-transform: uppercase;
+	margin-top:50px;
+	border-radius:2px;
+	cursor:pointer;
+	position:relative;
+}
+.btn:hover{
+ opacity: 90%;
+}
+
+body{
+  margin: 0;
+}
+
+h1 {
+  font-size: 28px;
+  margin-bottom: 2.5%;
+}
+
+input,
+span,
+label,
+textarea {
+  font-family: 'Ubuntu', sans-serif;
+  display: block;
+  margin: 10px;
+  padding: 5px;
+  border: none;
+  font-size: 15px;
+  color: #fff;
+}
+
+textarea:focus,
+input:focus {
+  outline: 0;
+}
+
+/* Question */
+
+input.question,
+textarea.question {
+  font-size: 48px;
+  font-weight: 300;
+  border-radius: 2px;
+  margin: 0;
+  border: none;
+  width: 80%;
+  background: rgba(0, 0, 0, 0);
+  transition: padding-top 0.2s ease, margin-top 0.2s ease;
+  overflow-x: hidden; 
+  color: #ffffff;
+}
+
+/* Underline and Placeholder */
+
+input.question + label,
+textarea.question + label {
+  display: block;
+  position: relative;
+  white-space: nowrap;
+  padding: 0;
+  margin: 0;
+  width: 10%;
+  border-top: 1px solid red;
+  -webkit-transition: width 0.4s ease;
+  transition: width 0.4s ease;
+  height: 0px;
+}
+
+#msg{
+  height: fit-content;
+}
+
+input.question:focus + label,
+textarea.question:focus + label {
+  width: 80%;
+}
+
+input.question:focus,
+input.question:valid {
+  padding-top: 35px;
+}
+
+textarea.question:valid,
+textarea.question:focus {
+  margin-top: 35px;
+}
+
+input.question:focus + label > span,
+input.question:valid + label > span {
+  top: -100px;
+  font-size: 22px;
+  color: #ffffff;
+}
+
+textarea.question:focus + label > span,
+textarea.question:valid + label > span {
+  top: -150px;
+  font-size: 22px;
+  color: #ffffff;
+}
+
+input.question:valid + label,
+textarea.question:valid + label {
+  border-color: rgb(255, 166, 0);
+}
+
+input.question:invalid,
+textarea.question:invalid {
+  box-shadow: none;
+}
+
+input.question + label > span,
+textarea.question + label > span {
+  font-weight: 300;
+  margin: 0;
+  position: absolute;
+  color: #ffffff;
+  font-size: 48px;
+  top: -66px;
+  left: 0px;
+  z-index: -1;
+  -webkit-transition: top 0.2s ease, font-size 0.2s ease, color 0.2s ease;
+  transition: top 0.2s ease, font-size 0.2s ease, color 0.2s ease;
+}
+
+input[type="submit"] {
+  color:#e40fb6;
+	background-color:#ffddb1;
+	outline: none;
+  border: 0;
+  color: #e06500;
+	padding:10px 20px;
+	text-transform: uppercase;
+	margin-top:50px;
+	border-radius:2px;
+	cursor:pointer;
+	position:relative;
+}
+
+input[type="submit"]:hover {
+  background: #EEE;
+}
+
+input[type="submit"]:active {
+  background: #999;
+}
+
+input.question:valid ~ input[type="submit"], textarea.question:valid ~ input[type="submit"] {
+  -webkit-animation: appear 1s forwards;
+  animation: appear 1s forwards;
+}
+
+input.question:invalid ~ input[type="submit"], textarea.question:invalid ~ input[type="submit"] {
+  display: none;
+}
+
+@-webkit-keyframes appear {
+  100% {
+    opacity: 1;
+  }
+
+}
+
+@keyframes appear {
+  100% {
+    opacity: 1;
+  }
+
+}
