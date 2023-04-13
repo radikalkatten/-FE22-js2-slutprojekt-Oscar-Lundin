@@ -34,10 +34,10 @@ const passwordLogin = <HTMLInputElement>document.getElementById('passwordLogin')
 const usernameCreate = <HTMLInputElement>document.getElementById('usernameCreate')
 const emailCreate = <HTMLInputElement>document.getElementById('emailCreate')
 const passwordCreate = <HTMLInputElement>document.getElementById('passwordCreate')
-const input = <HTMLInputElement>document.querySelector('input[name="profilePic"]:checked')
 const postMessage = <HTMLInputElement>document.getElementById('msg')
 const postTitle = <HTMLInputElement>document.getElementById('nme')
 // #endregion
+// console.log(input)
 createPostSubmit?.addEventListener('click', async (e)=>{
   e.preventDefault()
   const username= getCookie()
@@ -66,14 +66,14 @@ loginTryBtn?.addEventListener('click', async ()=>{
     currentFeed = getCookie()
     checkCurrentProfile(currentFeed)
     getPost(currentFeed)
-    getUsers(currentFeed)
     loggedinAs.innerText = `Inloggad som: ${currentFeed}`
   }else{
     return
   }
 })
 createSubmit?.addEventListener('click', ()=>{
-  checkUsernameExists(usernameCreate?.value)
+  const input = <HTMLInputElement>document.querySelector('input[name="profilePic"]:checked')
+  checkUsernameExists(usernameCreate?.value, Number(input.value))
   
 })
 
@@ -81,6 +81,7 @@ function checkInputCreate(username:string, email:string, password:string, profil
   if(username == "" || email == "" || password == ""){
     alert("please fill out all fields")
   }else{
+    console.log(profile)
     let createUser: {saveToFirebase():void} = new UserCreator.User( username, email, password, profile)
     createUser.saveToFirebase()
     loginCreate?.classList.add('inactive')
@@ -198,7 +199,7 @@ axios.get(endpoint)
   });
 }
 getPost(currentFeed)
-const checkUsernameExists = async (username:string): Promise<void> => {
+const checkUsernameExists = async (username:string, inputValue: number): Promise<void> => {
   try {
     let config = {
       headers:{
@@ -210,7 +211,7 @@ const checkUsernameExists = async (username:string): Promise<void> => {
     const data = response.data;
     
     if(!data){
-      checkInputCreate(usernameCreate?.value, emailCreate?.value, passwordCreate?.value, Number(input?.value))
+      checkInputCreate(usernameCreate?.value, emailCreate?.value, passwordCreate?.value, inputValue)
     }else{
       alert("username already taken")
     }
@@ -333,7 +334,9 @@ function clearPosts(): void{
 loggedinAs.addEventListener('click', () => {
   currentFeed = getCookie()
   checkCurrentProfile(currentFeed)
-  getPost(currentFeed)})
+  getPost(currentFeed)}
+)
+  
 getUsers(currentFeed)
 checkCookie()
 
