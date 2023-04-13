@@ -49,7 +49,7 @@ createPostSubmit?.addEventListener('click', async (e)=>{
   createPostForm?.classList.add('inactive')
 })
 loginTryBtn?.addEventListener('click', async ()=>{
-  console.log(usernameLogin.value)
+  
   if(await checkLogin(usernameLogin.value, passwordLogin.value) === true){
     setCookie(usernameLogin.value)
     profileShow?.classList.remove('inactive')
@@ -84,7 +84,7 @@ function checkInputCreate(username:string, email:string, password:string, profil
     createUser.saveToFirebase()
     loginCreate?.classList.add('inactive')
     logInForm?.classList.remove('inactive')
-    console.log(createUser)
+   
   }
 }
 function createPost(message:string, username:string, title:string, date:string, time:number): void {
@@ -93,11 +93,10 @@ function createPost(message:string, username:string, title:string, date:string, 
   }else{
     let createUser: {saveToFirebase():void} = new postCreator.post( username, date, message, title, time)
     createUser.saveToFirebase()
-    console.log(createUser)
+    
   }
 }
 const checkLogin = async(username:string, password:string):Promise<boolean|undefined> =>{
-  console.log(username)
   try {
     let config = {
       headers:{
@@ -107,13 +106,12 @@ const checkLogin = async(username:string, password:string):Promise<boolean|undef
     }
     const response = await axios.get(`https://socialmedia-49567-default-rtdb.europe-west1.firebasedatabase.app/users/${username}.json`, config);
     const data = response.data;
-    console.log(data)
+    
     if(data == null){
       alert("username does not exist")
       return
     }else{
       if(data.username == username && data.password == password){
-        console.log("whalecum")
         // document.cookie = "username="
         return true
       }else{
@@ -126,7 +124,7 @@ const checkLogin = async(username:string, password:string):Promise<boolean|undef
     console.error(error);
   }
 }
-console.log(currentFeed)
+
 const getPost = async (username:string): Promise<void> => {
 const endpoint = 'https://socialmedia-49567-default-rtdb.europe-west1.firebasedatabase.app/posts/.json';
 
@@ -149,7 +147,7 @@ axios.get(endpoint)
     .map((key) => ({ id: key, ...posts[key] }))
     .filter((post) => post.username === username);
     if(filteredPosts.length == 0){
-      console.log("helloo")
+      
       const apologyMessage = document.createElement('h1')
       apologyMessage.innerText = `${currentFeed} har tyvärr inga inlägg ännu`
       postContainer.appendChild(apologyMessage)
@@ -158,7 +156,7 @@ axios.get(endpoint)
       filteredPosts.sort()
       filteredPosts.reverse()
       const imgChoice = await addImgToPosts(username)
-      console.log(imgChoice)
+      
       filteredPosts.forEach(posts => {
         
         const postTextDiv= document.createElement('div')
@@ -187,13 +185,12 @@ axios.get(endpoint)
         postTextDiv.classList.add('postTextDiv')
         post.appendChild(postTextDiv)
         img.classList.add('profileImgPost')
-        console.log("img src:", img.src)
         postHeader.appendChild(author)
         postHeader.appendChild(titel)
         postTextDiv.appendChild(date)
       })
     }
-    console.log(filteredPosts);
+    
   })
   .catch((error) => {
     console.error(error);
@@ -210,7 +207,7 @@ const checkUsernameExists = async (username:string): Promise<void> => {
     }
     const response = await axios.get(`https://socialmedia-49567-default-rtdb.europe-west1.firebasedatabase.app/users/${username}.json?`, config);
     const data = response.data;
-    console.log(username, data)
+    
     if(!data){
       checkInputCreate(usernameCreate?.value, emailCreate?.value, passwordCreate?.value, Number(input?.value))
     }else{
@@ -234,8 +231,6 @@ function getCookie():string {
       return c.substring(name.length, c.length);
     }
   }
-  console.log(ca)
-  console.log(decodedCookie)
   return "";
 }
 
@@ -249,7 +244,6 @@ function setCookie(uvalue: string):void {
 function checkCurrentProfile(feed: string): void {
   profileh1.innerText= ""
   const cookie = getCookie()
-  console.log("hellooo=")
   if(feed === cookie){
     profileh1.innerText = `Du kollar på din egna feed`
   }else{
@@ -283,26 +277,25 @@ const addImgToPosts = async(username: string): Promise<string | undefined> =>{
   try{
     const response = await axios.get(`https://socialmedia-49567-default-rtdb.europe-west1.firebasedatabase.app/users/${username}.json`)
     const data = response.data
-    console.log(data)
     switch (data.img) {
       case 1:
-        console.log("You chose option 1");
+    
         return require("../images/garf1.jpg")
       case 2:
-        console.log("You chose option 2");
+    
         return require("../images/garf2.jpg")
       case 3:
-        console.log("You chose option 3");
+       
         return require("../images/garf3.jpg")
       case 4:
-        console.log("You chose option 4");
+     
         return require("../images/garf4.jpg")
       default:
         console.log("Invalid option");
 
   }
 }catch{
-  console.log("ergor")
+  console.log('faulty option')
 }
 }
 const getUsers = async(username:string): Promise<void> => {
@@ -317,7 +310,7 @@ const getUsers = async(username:string): Promise<void> => {
       userDiv.classList.add('userDiv')
       users.forEach((u) =>{
         if(u == notMe){
-          console.log('men det är ju du ')
+          console.log('')
         }else{
           const user = document.createElement('h3')
           user.innerText = `${u}`
@@ -330,7 +323,6 @@ const getUsers = async(username:string): Promise<void> => {
 }
 function setNewCurrentUser(username: string): any{
   currentFeed = username
-  console.log(currentFeed)
   checkCurrentProfile(currentFeed)
   getPost(currentFeed)
 }
@@ -355,28 +347,25 @@ function loadComicImage() {
   xhr.onreadystatechange = function(){
       if(xhr.readyState === 4){
           const remotedoc: any = new DOMParser().parseFromString(xhr.responseText.replace(/<script(.|\s)*?\/script>/g, ''), 'text/html');
-          console.log(remotedoc)
+        
           let remoteUrl: any = remotedoc.getElementById("comic-zoom").getAttribute("data-zoom-image");
 
-          console.log("remoteUrl: " + remoteUrl)
           let image = <HTMLImageElement> document.getElementById('comic');
           image.src = remoteUrl;
           const comicHolder = document.getElementById('comicHolder')
           comicHolder?.appendChild(image)
-          console.log("bebe")
+          
           
         }
       };
 }
 loadComicImage()
-console.log(document.cookie)
 // #region nospaceallowed
 const formTextFields = document.getElementsByClassName('noSpaces');
 for(let i = 0; i < 5; i++){
   formTextFields[i].addEventListener('keypress', function(e){
     let keyboardEvent = <KeyboardEvent> e
         if (keyboardEvent.code === 'Space') {
-          console.log(keyboardEvent.code)
           e.preventDefault();
         }
       })
