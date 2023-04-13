@@ -66,6 +66,7 @@ loginTryBtn?.addEventListener('click', async ()=>{
     currentFeed = getCookie()
     checkCurrentProfile(currentFeed)
     getPost(currentFeed)
+    getUsers(currentFeed)
     loggedinAs.innerText = `Inloggad som: ${currentFeed}`
   }else{
     return
@@ -309,9 +310,7 @@ const getUsers = async(username:string): Promise<void> => {
       const users = Object.keys(data)
       userDiv.classList.add('userDiv')
       users.forEach((u) =>{
-        if(u == notMe){
-          console.log('')
-        }else{
+        if(u != notMe){
           const user = document.createElement('h3')
           user.innerText = `${u}`
           userDiv?.appendChild(user)
