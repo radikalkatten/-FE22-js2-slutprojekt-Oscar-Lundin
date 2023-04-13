@@ -25,7 +25,7 @@ createNewPostBtn?.addEventListener('click', ()=>{createPostForm?.classList.toggl
 logInBtn?.addEventListener('click', () =>{logInForm?.classList.toggle('inactive'); loginCreate?.classList.add('inactive')})
 createFormBtn?.addEventListener('click', () =>{loginCreate?.classList.toggle('inactive'); logInForm?.classList.add('inactive')})
 createFormBtn2?.addEventListener('click', () =>{loginCreate?.classList.remove('inactive'); logInForm?.classList.add('inactive')})
-logOutBtn?.addEventListener('click', () => {document.cookie ='username=; Max-Age=-99999999;'; console.log(document.cookie); location.reload()})
+logOutBtn?.addEventListener('click', () => {document.cookie ='username=; path="/"; Max-Age=-99999999;'; console.log(document.cookie); location.reload()})
 let currentFeed: string = `${getCookie()}`
 // #endregion
 // #region inputStuff
