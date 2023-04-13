@@ -25,7 +25,7 @@ createNewPostBtn?.addEventListener('click', ()=>{createPostForm?.classList.toggl
 logInBtn?.addEventListener('click', () =>{logInForm?.classList.toggle('inactive'); loginCreate?.classList.add('inactive')})
 createFormBtn?.addEventListener('click', () =>{loginCreate?.classList.toggle('inactive'); logInForm?.classList.add('inactive')})
 createFormBtn2?.addEventListener('click', () =>{loginCreate?.classList.remove('inactive'); logInForm?.classList.add('inactive')})
-logOutBtn?.addEventListener('click', () => {console.log("logout function cookie", document.cookie); document.cookie = "username=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=None; Secure";  location.reload()})
+logOutBtn?.addEventListener('click', () => {document.cookie = "username=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=None; Secure";  location.reload()})
 let currentFeed: string = `${getCookie()}`
 // #endregion
 // #region inputStuff
@@ -44,7 +44,7 @@ createPostSubmit?.addEventListener('click', async (e)=>{
   const dateGet = new Date()
   const date = dateGet.toString()
   const time = dateGet.getTime()
-  createPost(postMessage.value, username, postTitle.value, date, time)
+  await createPost(postMessage.value, username, postTitle.value, date, time)
   getPost(getCookie())
   createPostForm?.classList.add('inactive')
 })
@@ -88,12 +88,12 @@ function checkInputCreate(username:string, email:string, password:string, profil
    
   }
 }
-function createPost(message:string, username:string, title:string, date:string, time:number): void {
+async function createPost(message:string, username:string, title:string, date:string, time:number): Promise<void> {
   if(message == "" || title == ""){
     alert("please fill out all fields")
   }else{
     let createUser: {saveToFirebase():void} = new postCreator.post( username, date, message, title, time)
-    createUser.saveToFirebase()
+    await createUser.saveToFirebase()
     
   }
 }
