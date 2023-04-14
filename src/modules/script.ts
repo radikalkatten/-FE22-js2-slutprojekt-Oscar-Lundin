@@ -55,6 +55,7 @@ loginTryBtn?.addEventListener('click', async ()=>{
     profileShow?.classList.remove('inactive')
     contentHolder?.classList.remove('inactive')
     logInForm?.classList.add('inactive')
+    deleteButton?.classList.remove('inactive')
     createPostForm?.classList.add('inactive')
     loggedinAs?.classList.remove('inactive')
     createNewPostBtn?.classList.remove('inactive')
@@ -76,7 +77,41 @@ createSubmit?.addEventListener('click', ()=>{
   checkUsernameExists(usernameCreate?.value, Number(input.value))
   
 })
+const deleteButton = document.getElementById('deleteButton')
+deleteButton?.addEventListener('click', () =>{deleteUser(getCookie())})
+const deleteUser = async(username:string): Promise<void> =>{
+  interface Post {
+    date: string;
+    message: string;
+    time: number;
+    title: string;
+    username: string;
+  }
+  try{
+    let config = {
+      headers:{
+        'crossorigin': 'true',
+        'Access-Control-Allow-Origin':'true'
+      }
+    }
 
+    await axios.delete(`https://socialmedia-49567-default-rtdb.europe-west1.firebasedatabase.app/users/${username}.json`, config)
+    const response = await axios.get("https://socialmedia-49567-default-rtdb.europe-west1.firebasedatabase.app/posts/.json")
+    const posts: { [key: string]: Post } = response.data;
+
+    const filteredPosts = Object.keys(posts)
+    .map((key) => ({ id: key, ...posts[key] }))
+    .filter((post) => post.username === username);
+    console.log(filteredPosts)
+    for(let i = 0; i < filteredPosts.length; i++){
+      await axios.delete(`https://socialmedia-49567-default-rtdb.europe-west1.firebasedatabase.app/posts/${filteredPosts[i].id}.json`)
+    }
+    document.cookie ='username=; Max-Age=-99999999;'  
+    location.reload()
+  }catch{
+    console.log("couldnt remove content")
+  }
+}
 function checkInputCreate(username:string, email:string, password:string, profile:number): void {
   if(username == "" || email == "" || password == ""){
     alert("please fill out all fields")
@@ -261,6 +296,8 @@ function checkCookie(): void{
     loggedinAs?.classList.add('inactive')
     createNewPostBtn?.classList.add('inactive')
     logOutBtn?.classList.add('inactive')
+    deleteButton?.classList.add('inactive')
+    
   }else{
     profileShow?.classList.remove('inactive')
     contentHolder?.classList.remove('inactive')
