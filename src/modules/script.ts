@@ -106,7 +106,7 @@ const deleteUser = async(username:string): Promise<void> =>{
     for(let i = 0; i < filteredPosts.length; i++){
       await axios.delete(`https://socialmedia-49567-default-rtdb.europe-west1.firebasedatabase.app/posts/${filteredPosts[i].id}.json`)
     }
-    document.cookie ='username=; Max-Age=-99999999;'  
+    document.cookie = "username=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=None; Secure" 
     location.reload()
   }catch{
     console.log("couldnt remove content")
