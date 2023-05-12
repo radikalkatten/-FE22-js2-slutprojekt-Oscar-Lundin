@@ -1,6 +1,7 @@
 import * as UserCreator from "./UserCreator"
 import * as postCreator from "./postCreator"
-import axios from "../../node_modules/axios/lib/axios"
+import { getPost, checkLogin, checkUsernameExists, getUsers, deleteUser} from "./firebaseScripts"
+import { getCookie, setCookie } from "./cookies"
 import { title } from "process"
 // #region buttons
 const logInBtn = document.getElementById('logInBtn')
@@ -13,11 +14,9 @@ const loginTryBtn = document.getElementById('loginTryBtn')
 const createNewPostBtn = document.getElementById('createNewPost')
 const createPostForm  = document.getElementById('createPostForm')
 const createPostSubmit = document.getElementById('createPostBtn')
-const usersDir = document.getElementById('usersDir')
 const welcomeText = document.getElementById('welcomeText')
 const profileShow = document.getElementById('profileShow')
 const profileh1 = <HTMLTextAreaElement> document.getElementById('profileh1')
-const postContainer = <HTMLDivElement>document.getElementById('postContainer')
 const contentHolder = <HTMLDivElement>document.getElementById('contentHolder')
 const logOutBtn = document.getElementById('logOutBtn')
 const loggedinAs = <HTMLTextAreaElement> document.getElementById('loggedInas')
@@ -48,22 +47,12 @@ createPostSubmit?.addEventListener('click', async (e)=>{
   getPost(getCookie())
   createPostForm?.classList.add('inactive')
 })
+
 loginTryBtn?.addEventListener('click', async ()=>{
   
   if(await checkLogin(usernameLogin.value, passwordLogin.value) === true){
     setCookie(usernameLogin.value)
-    profileShow?.classList.remove('inactive')
-    contentHolder?.classList.remove('inactive')
-    logInForm?.classList.add('inactive')
-    deleteButton?.classList.remove('inactive')
-    createPostForm?.classList.add('inactive')
-    loggedinAs?.classList.remove('inactive')
-    createNewPostBtn?.classList.remove('inactive')
-    welcomeText?.classList.add('inactive')
-    logInBtn?.classList.add('inactive')
-    createFormBtn?.classList.add('inactive')
-    contentHolder?.classList.remove('inactive')
-    logOutBtn?.classList.remove('inactive')
+    showFeedLoggedIn()
     currentFeed = getCookie()
     checkCurrentProfile(currentFeed)
     getPost(currentFeed)
@@ -72,58 +61,29 @@ loginTryBtn?.addEventListener('click', async ()=>{
     return
   }
 })
-createSubmit?.addEventListener('click', ()=>{
+createSubmit?.addEventListener('click', async ()=>{
   const input = <HTMLInputElement>document.querySelector('input[name="profilePic"]:checked')
-  checkUsernameExists(usernameCreate?.value, Number(input.value))
-  
+  let checkuser = await checkUsernameExists(usernameCreate?.value, Number(input.value))
+  const inputvalue = parseInt(input.value)
+  if(checkuser == true){
+    checkInputCreate(usernameCreate?.value, emailCreate?.value, passwordCreate?.value, inputvalue)
+  }
 })
 const deleteButton = document.getElementById('deleteButton')
 deleteButton?.addEventListener('click', () =>{deleteUser(getCookie())})
-const deleteUser = async(username:string): Promise<void> =>{
-  interface Post {
-    date: string;
-    message: string;
-    time: number;
-    title: string;
-    username: string;
-  }
-  try{
-    let config = {
-      headers:{
-        'crossorigin': 'true',
-        'Access-Control-Allow-Origin':'true'
-      }
-    }
 
-    await axios.delete(`https://socialmedia-49567-default-rtdb.europe-west1.firebasedatabase.app/users/${username}.json`, config)
-    const response = await axios.get("https://socialmedia-49567-default-rtdb.europe-west1.firebasedatabase.app/posts/.json")
-    const posts: { [key: string]: Post } = response.data;
-
-    const filteredPosts = Object.keys(posts)
-    .map((key) => ({ id: key, ...posts[key] }))
-    .filter((post) => post.username === username);
-    console.log(filteredPosts)
-    for(let i = 0; i < filteredPosts.length; i++){
-      await axios.delete(`https://socialmedia-49567-default-rtdb.europe-west1.firebasedatabase.app/posts/${filteredPosts[i].id}.json`)
-    }
-    document.cookie = "username=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=None; Secure" 
-    location.reload()
-  }catch{
-    console.log("couldnt remove content")
-  }
-}
 function checkInputCreate(username:string, email:string, password:string, profile:number): void {
   if(username == "" || email == "" || password == ""){
     alert("please fill out all fields")
   }else{
-    console.log(profile)
     let createUser: {saveToFirebase():void} = new UserCreator.User( username, email, password, profile)
     createUser.saveToFirebase()
     loginCreate?.classList.add('inactive')
     logInForm?.classList.remove('inactive')
-   
+    
   }
 }
+
 async function createPost(message:string, username:string, title:string, date:string, time:number): Promise<void> {
   if(message == "" || title == ""){
     alert("please fill out all fields")
@@ -133,150 +93,10 @@ async function createPost(message:string, username:string, title:string, date:st
     
   }
 }
-const checkLogin = async(username:string, password:string):Promise<boolean|undefined> =>{
-  try {
-    let config = {
-      headers:{
-        'crossorigin': 'true',
-        'Access-Control-Allow-Origin':'true'
-      }
-    }
-    const response = await axios.get(`https://socialmedia-49567-default-rtdb.europe-west1.firebasedatabase.app/users/${username}.json`, config);
-    const data = response.data;
-    
-    if(data == null){
-      alert("username does not exist")
-      return
-    }else{
-      if(data.username == username && data.password == password){
-        // document.cookie = "username="
-        return true
-      }else{
-        alert("no username with that password exists")
-        
-        return false
-      }
-    }
-  } catch (error) {
-    console.error(error);
-  }
-}
 
-const getPost = async (username:string): Promise<void> => {
-const endpoint = 'https://socialmedia-49567-default-rtdb.europe-west1.firebasedatabase.app/posts/.json';
-
-
-interface Post {
-  date: string;
-  message: string;
-  time: number;
-  title: string;
-  username: string;
-}
-clearPosts()
-
-axios.get(endpoint)
-  .then(async(response) => {
-    const posts: { [key: string]: Post } = response.data;
-    
-    
-    const filteredPosts = Object.keys(posts)
-    .map((key) => ({ id: key, ...posts[key] }))
-    .filter((post) => post.username === username);
-    if(filteredPosts.length == 0){
-      
-      const apologyMessage = document.createElement('h1')
-      apologyMessage.innerText = `${currentFeed} har tyvärr inga inlägg ännu`
-      postContainer.appendChild(apologyMessage)
-      return 
-    }else{
-      filteredPosts.sort()
-      filteredPosts.reverse()
-      const imgChoice = await addImgToPosts(username)
-      
-      filteredPosts.forEach(posts => {
-        
-        const postTextDiv= document.createElement('div')
-        const post = document.createElement('div')
-        const postHeader = document.createElement('div')
-        const date = document.createElement('p')
-        const author = document.createElement('h2')
-        const message = document.createElement('p')
-        const imgContainer = document.createElement('div')
-        const img: any= document.createElement('img')
-        const titel = document.createElement('h1')
-        post.classList.add('post')
-        postHeader.classList.add('postHeader')
-        postTextDiv.appendChild(postHeader)
-        date.innerText = `${posts.date}`
-        author.innerText = `${posts.username}`
-        postContainer?.appendChild(post)
-        titel.innerText = `${posts.title}`
-        
-        imgContainer?.appendChild(img)
-        post.appendChild(imgContainer)
-        img.src = imgChoice
-        message.innerText = `${posts.message}`
-        message.classList.add('message')
-        postTextDiv.appendChild(message)
-        postTextDiv.classList.add('postTextDiv')
-        post.appendChild(postTextDiv)
-        img.classList.add('profileImgPost')
-        postHeader.appendChild(author)
-        postHeader.appendChild(titel)
-        postTextDiv.appendChild(date)
-      })
-    }
-    
-  })
-  .catch((error) => {
-    console.error(error);
-  });
-}
 getPost(currentFeed)
-const checkUsernameExists = async (username:string, inputValue: number): Promise<void> => {
-  try {
-    let config = {
-      headers:{
-        'crossorigin': 'true',
-        'Access-Control-Allow-Origin':'true'
-      }
-    }
-    const response = await axios.get(`https://socialmedia-49567-default-rtdb.europe-west1.firebasedatabase.app/users/${username}.json?`, config);
-    const data = response.data;
-    
-    if(!data){
-      checkInputCreate(usernameCreate?.value, emailCreate?.value, passwordCreate?.value, inputValue)
-    }else{
-      alert("username already taken")
-    }
-  } catch (error) {
-    console.error(error);
-  }
-}
 
-function getCookie():string {
-  let name = "username=";
-  let decodedCookie = decodeURIComponent(document.cookie);
-  let ca = decodedCookie.split(';');
-  for(let i = 0; i <ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
-}
 
-function setCookie(uvalue: string):void {
-  const d = new Date();
-  d.setTime(d.getTime() + (24*60*60*1000));
-  let expires = "expires="+ d.toUTCString();
-  document.cookie = "username=" + uvalue + ";" + expires + ";path=/; SameSite=none; Secure";
-}
 // document.cookie = "username=" + "shinsu" + ";" + "expires=Thu, 01 Jan 1970 00:00:00 UTC;"
 function checkCurrentProfile(feed: string): void {
   profileh1.innerText= ""
@@ -287,87 +107,49 @@ function checkCurrentProfile(feed: string): void {
     profileh1.innerText = `Du kollar på ${currentFeed}'s feed`
   }
 }
+
+function showFeedLoggedIn(){
+  profileShow?.classList.remove('inactive')
+  contentHolder?.classList.remove('inactive')
+  logInForm?.classList.add('inactive')
+  deleteButton?.classList.remove('inactive')
+  createPostForm?.classList.add('inactive')
+  loggedinAs?.classList.remove('inactive')
+  createNewPostBtn?.classList.remove('inactive')
+  welcomeText?.classList.add('inactive')
+  logInBtn?.classList.add('inactive')
+  createFormBtn?.classList.add('inactive')
+  contentHolder?.classList.remove('inactive')
+  logOutBtn?.classList.remove('inactive')
+}
+
+function hideFeed(){
+  profileShow?.classList.add('inactive')
+  contentHolder?.classList.add('inactive')
+  createPostForm?.classList.add('inactive')
+  loggedinAs?.classList.add('inactive')
+  createNewPostBtn?.classList.add('inactive')
+  logOutBtn?.classList.add('inactive')
+  deleteButton?.classList.add('inactive')
+}
+
 function checkCookie(): void{
   let cookie = getCookie()
   if(cookie === ""){
-    profileShow?.classList.add('inactive')
-    contentHolder?.classList.add('inactive')
-    createPostForm?.classList.add('inactive')
-    loggedinAs?.classList.add('inactive')
-    createNewPostBtn?.classList.add('inactive')
-    logOutBtn?.classList.add('inactive')
-    deleteButton?.classList.add('inactive')
+    hideFeed()
     
   }else{
-    profileShow?.classList.remove('inactive')
-    contentHolder?.classList.remove('inactive')
-    logInForm?.classList.add('inactive')
-    createPostForm?.classList.add('inactive')
-    loggedinAs?.classList.remove('inactive')
-    createNewPostBtn?.classList.remove('inactive')
-    welcomeText?.classList.add('inactive')
-    logInBtn?.classList.add('inactive')
-    createFormBtn?.classList.add('inactive')
-    loggedinAs.innerText = `Inloggad som: ${cookie}`
+    showFeedLoggedIn()
     checkCurrentProfile(cookie)
   }
 }
-const addImgToPosts = async(username: string): Promise<string | undefined> =>{
-  try{
-    const response = await axios.get(`https://socialmedia-49567-default-rtdb.europe-west1.firebasedatabase.app/users/${username}.json`)
-    const data = response.data
-    switch (data.img) {
-      case 1:
-    
-        return require("../images/garf1.jpg")
-      case 2:
-    
-        return require("../images/garf2.jpg")
-      case 3:
-       
-        return require("../images/garf3.jpg")
-      case 4:
-     
-        return require("../images/garf4.jpg")
-      default:
-        console.log("Invalid option");
 
-  }
-}catch{
-  console.log('faulty option')
-}
-}
-const getUsers = async(username:string): Promise<void> => {
-  axios.get(`https://socialmedia-49567-default-rtdb.europe-west1.firebasedatabase.app/users/.json`)
-    .then(async(response) => {
-      const data = await response.data
-      const notMe = username
-      const userDiv = document.createElement('div')
-      const userHolder = document.getElementById('userHolder')
-      userHolder?.appendChild(userDiv)
-      const users = Object.keys(data)
-      userDiv.classList.add('userDiv')
-      users.forEach((u) =>{
-        if(u != notMe){
-          const user = document.createElement('h3')
-          user.innerText = `${u}`
-          userDiv?.appendChild(user)
-          user.classList.add('userButton')
-          user.addEventListener('click', () => {setNewCurrentUser(u)})
-        }
-      })
-    })
-}
-function setNewCurrentUser(username: string): any{
+export function setNewCurrentUser(username: string): any{
   currentFeed = username
   checkCurrentProfile(currentFeed)
   getPost(currentFeed)
 }
-function clearPosts(): void{
-  while(postContainer.firstChild){
-    postContainer.removeChild(postContainer.firstChild);
-  }
-}
+
 loggedinAs.addEventListener('click', () => {
   currentFeed = getCookie()
   checkCurrentProfile(currentFeed)
@@ -377,6 +159,7 @@ loggedinAs.addEventListener('click', () => {
 getUsers(currentFeed)
 checkCookie()
 
+// get garfield strip 
 function loadComicImage() {
   const baseUrl = "https://www.arcamax.com/thefunnies/garfield";
   const xhr = new XMLHttpRequest();

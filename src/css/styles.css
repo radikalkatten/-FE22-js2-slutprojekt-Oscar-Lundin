@@ -73,6 +73,8 @@ body button{
   width: 22%;
   float: right;
   margin-top: 80px;
+  max-height: 500px;
+  overflow-y: scroll;
 }
 
 #userHolder {
@@ -171,21 +173,13 @@ body button{
   box-shadow: none;
 }
 
-@media (min-width: 1024px) {
-  .button-76 {
-    font-size: 1.5rem; 
-    padding: 1rem 1.5rem;
-    line-height: 2rem; 
-  }
-
-}
 
 .inactive{
   display: none
 }
 
 body{
-	background-image: url("https://c4.wallpaperflare.com/wallpaper/153/392/956/cat-eyes-garfield-minimalism-wallpaper-preview.jpg");
+  background-image: url("https://c4.wallpaperflare.com/wallpaper/153/392/956/cat-eyes-garfield-minimalism-wallpaper-preview.jpg");
 	background-position: center;
   background-origin: content-box;
   background-repeat: repeat;
@@ -213,7 +207,7 @@ body{
 }
 
 .text-center{
-	color:#fff;	
+  color:#fff;	
 	text-transform:uppercase;
   font-size: 23px;
   margin: -50px 0 80px 0;
@@ -234,7 +228,7 @@ body{
 }
 
 .box{
-	position:absolute;
+  position:absolute;
 	left:50%;
 	top: 55%;
 	transform: translate(-50%,-50%);
@@ -245,13 +239,13 @@ body{
 }
 
 .input-container{
-	position:relative;
+  position:relative;
 	margin-bottom:25px;
 }
 
 .input-container label{
-	
-	top:0px;
+  
+  top:0px;
 	left:0px;
 	font-size:16px;
 	color:#fff;	
@@ -308,7 +302,7 @@ body{
   margin-left: 10px;
 }
 .btn{
-	color:#fff;
+  color:#fff;
 	background-color:#e74c3c;
 	outline: none;
   border: 0;
@@ -321,7 +315,7 @@ body{
 	position:relative;
 }
 .btn:hover{
- opacity: 90%;
+  opacity: 90%;
 }
 
 body{
@@ -475,12 +469,36 @@ input.question:invalid ~ input[type="submit"], textarea.question:invalid ~ input
   100% {
     opacity: 1;
   }
-
+  
 }
 
 @keyframes appear {
   100% {
     opacity: 1;
   }
+  
+}
 
+@media (min-width: 1024px) {
+  .button-76 {
+    font-size: 1.5rem; 
+    padding: 1rem 1.5rem;
+    line-height: 2rem; 
+  }
+
+}
+@media only screen and (max-width: 768px)  {
+  .box{
+    height: 40%;
+    width: 40%
+  }
+  .box form{
+    height: 50%;
+  }
+  .box input{
+    height: 50%;
+  }
+  #logInForm{
+    padding: 70px 20px
+  }
 }
