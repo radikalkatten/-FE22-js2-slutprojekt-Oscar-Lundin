@@ -11,7 +11,7 @@ function getCookie():string {
       return c.substring(name.length, c.length);
     }
   }
-  return "";
+  return "NO-USER";
 }
 
 function setCookie(uvalue: string):void {

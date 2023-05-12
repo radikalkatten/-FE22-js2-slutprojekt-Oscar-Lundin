@@ -149,7 +149,7 @@ const getPost = async (username:string): Promise<void> => {
       
       if(data == null){
         alert("username does not exist")
-        return
+        return false
       }else{
         if(data.username == username && data.password == password){
           // document.cookie = "username="

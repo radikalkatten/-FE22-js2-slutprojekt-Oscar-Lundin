@@ -135,7 +135,7 @@ function hideFeed(){
 
 function checkCookie(): void{
   let cookie = getCookie()
-  if(cookie === ""){
+  if(cookie === "NO-USER"){
     hideFeed()
     
   }else{
